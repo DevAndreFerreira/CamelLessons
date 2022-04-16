@@ -1,21 +1,16 @@
 package com.CamelLessons.route;
 
-import com.CamelLessons.component.CriaHttpComponent;
 import com.CamelLessons.model.Employee;
 import com.CamelLessons.processor.MyProcessor;
 import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.model.dataformat.JsonLibrary;
 import org.apache.camel.model.rest.RestBindingMode;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ApplicationResource extends RouteBuilder {
-
-    @Autowired
-    private CriaHttpComponent httpComponent;
 
     @Override
     public void configure() throws Exception {
