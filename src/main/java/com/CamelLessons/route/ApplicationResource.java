@@ -1,6 +1,7 @@
 package com.CamelLessons.route;
 
 import com.CamelLessons.model.Employee;
+import com.CamelLessons.processor.DeuRuimProcessor;
 import com.CamelLessons.processor.MyProcessor;
 import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
@@ -27,13 +28,22 @@ public class ApplicationResource extends RouteBuilder {
                 .consumes(MediaType.APPLICATION_JSON_VALUE)
                 .produces(MediaType.APPLICATION_JSON_VALUE).route()
                 .marshal().json(JsonLibrary.Jackson)
-                .setHeader(Exchange.HTTP_METHOD, constant("POST"))
                 .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
+                .streamCaching()
                 .to("http://localhost:8080/employee?bridgeEndpoint=true")
+                .choice().when().simple("${header.CamelHttpResponseCode} == '200'")
+                .process(exchange -> {
+                    System.out.println("");
+                })
+                .setHeader(Exchange.HTTP_METHOD, constant("GET"))
+                .to("http://localhost:8080/employee?bridgeEndpoint=true&id=5")
                 .process(exchange -> {
                     System.out.println();
                 })
                 .unmarshal().json(JsonLibrary.Jackson)
-                .process(new MyProcessor());
+                .process(new MyProcessor())
+                .otherwise()
+                .process(new DeuRuimProcessor());
+
     }
 }
