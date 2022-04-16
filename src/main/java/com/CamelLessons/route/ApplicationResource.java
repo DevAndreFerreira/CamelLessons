@@ -31,7 +31,7 @@ public class ApplicationResource extends RouteBuilder {
                 .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
                 .streamCaching()
                 .to("http://localhost:8080/employee?bridgeEndpoint=true")
-                .choice().when().simple("${header.CamelHttpResponseCode} == '500'")
+                .choice().when().simple("${header.CamelHttpResponseCode} == '200'")
                 .process(exchange -> {
                     System.out.println("");
                 })
